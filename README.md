@@ -598,8 +598,15 @@
             </div>
             <span class="world-tab-badge">1 BOSS</span>
           </button>
+          <button type="button" class="world-tab" data-target="basketball">
+            <div>
+              <span class="world-tab-code">CELESTIAL COURT // ARENA</span>
+              <span class="world-tab-name">GODLY BASKETBALL</span>
+            </div>
+            <span class="world-tab-badge">1 BOSS</span>
+          </button>
         </div>
-        <div class="world-status-note" id="world-status-note">CLICK THE STAR OR BLACK HOLE TO LOCK TARGET, THEN CLICK DEPLOY</div>
+        <div class="world-status-note" id="world-status-note">CLICK THE STAR, BLACK HOLE, OR BASKETBALL TO LOCK TARGET, THEN CLICK DEPLOY</div>
       </div>
 
       <!-- Bottom Floating Tactical Telemetry & Launch Dock -->
@@ -794,7 +801,7 @@
         return this.enabled;
       }
 
-      playTone(freqStart, freqEnd, duration, type = 'sawtooth', gainVal = 0.08) {
+      playTone(freqStart, freqEnd, duration, type = 'sawtooth', gainVal = 2.4) {
         if (!this.enabled) return;
         this.init();
         if (!this.ctx) return;
@@ -806,7 +813,7 @@
         osc.frequency.setValueAtTime(freqStart, now);
         osc.frequency.exponentialRampToValueAtTime(Math.max(20, freqEnd), now + duration);
 
-        gain.gain.setValueAtTime(gainVal, now);
+        gain.gain.setValueAtTime(gainVal * 1.8, now);
         gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
 
         osc.connect(gain);
@@ -815,7 +822,7 @@
         osc.stop(now + duration);
       }
 
-      playNoise(duration = 0.22, gainVal = 0.14) {
+      playNoise(duration = 0.22, gainVal = 2.4) {
         if (!this.enabled) return;
         this.init();
         if (!this.ctx) return;
@@ -836,7 +843,7 @@
         filter.frequency.setValueAtTime(420, now);
 
         const gain = this.ctx.createGain();
-        gain.gain.setValueAtTime(gainVal, now);
+        gain.gain.setValueAtTime(gainVal * 1.8, now);
         gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
 
         noise.connect(filter);
@@ -846,65 +853,65 @@
       }
 
       playShoot() {
-        this.playTone(920, 240, 0.065, 'square', 0.045);
+        this.playTone(920, 240, 0.065, 'square', 0.05);
       }
 
       playBossFire() {
-        this.playTone(230, 85, 0.11, 'sawtooth', 0.055);
+        this.playTone(320, 110, 0.15, 'sawtooth', 2.8);
       }
 
       playHit() {
-        this.playTone(170, 52, 0.16, 'sawtooth', 0.14);
-        this.playNoise(0.14, 0.12);
+        this.playTone(240, 70, 0.22, 'sawtooth', 2.8);
+        this.playNoise(0.20, 2.8);
       }
 
       playDash() {
-        this.playTone(300, 980, 0.12, 'triangle', 0.08);
+        this.playTone(400, 1200, 0.15, 'triangle', 2.8);
       }
 
       playExplosion(large = false) {
-        this.playNoise(large ? 0.55 : 0.26, large ? 0.22 : 0.13);
-        this.playTone(large ? 115 : 150, 28, large ? 0.5 : 0.22, 'sawtooth', 0.14);
+        this.playNoise(large ? 0.75 : 0.35, large ? 3.5 : 2.8);
+        this.playTone(large ? 140 : 180, 20, large ? 3.5 : 2.8, 'sawtooth', large ? 3.5 : 2.8);
       }
 
       playPhaseShift() {
-        this.playTone(180, 640, 0.28, 'sawtooth', 0.11);
+        this.playTone(220, 880, 0.35, 'sawtooth', 2.8);
       }
 
       playLaser() {
-        this.playTone(540, 120, 0.35, 'sawtooth', 0.1);
+        this.playTone(680, 160, 0.45, 'sawtooth', 2.8);
       }
 
       playOmegaBeam() {
-        this.playNoise(0.55, 0.22);
-        this.playTone(140, 36, 0.65, 'sawtooth', 0.18);
-        this.playTone(880, 190, 0.42, 'square', 0.09);
+        this.playNoise(0.70, 3.2);
+        this.playTone(180, 45, 0.80, 'sawtooth', 3.2);
+        this.playTone(1100, 240, 0.50, 'square', 3.2);
       }
 
       playSelect() {
-        this.playTone(620, 920, 0.07, 'square', 0.05);
+        this.playTone(700, 1100, 0.09, 'square', 2.2);
       }
 
       playWin() {
-        this.playTone(440, 880, 0.22, 'triangle', 0.1);
-        setTimeout(() => this.playTone(554, 1108, 0.32, 'triangle', 0.11), 140);
+        this.playTone(520, 980, 0.28, 'triangle', 2.8);
+        setTimeout(() => this.playTone(650, 1320, 0.38, 'triangle', 2.8), 140);
       }
 
       playLose() {
-        this.playTone(280, 70, 0.45, 'sawtooth', 0.13);
+        this.playTone(340, 50, 0.55, 'sawtooth', 2.8);
       }
 
       playHeal() {
         if (!this.enabled) return;
-        this.playTone(520, 780, 0.12, 'triangle', 0.08);
-        setTimeout(() => this.playTone(780, 1040, 0.18, 'triangle', 0.09), 80);
+        this.playTone(600, 900, 0.15, 'triangle', 2.6);
+        setTimeout(() => this.playTone(900, 1200, 0.22, 'triangle', 2.6), 80);
       }
 
       playUpgrade() {
         if (!this.enabled) return;
-        this.playTone(440, 660, 0.11, 'square', 0.07);
-        setTimeout(() => this.playTone(660, 880, 0.12, 'triangle', 0.08), 75);
-        setTimeout(() => this.playTone(880, 1320, 0.22, 'triangle', 0.09), 150);
+        this.playTone(500, 750, 0.14, 'square', 2.6);
+        setTimeout(() => this.playTone(750, 1000, 0.15, 'triangle', 2.6), 75);
+        setTimeout(() => this.playTone(1000, 1500, 0.28, 'triangle', 2.6), 150);
       }
     }
 
@@ -980,6 +987,13 @@
         desc: 'Standalone Galactic Core Boss: 4D Hypercube Singularity with 50,000 HP, 4 Escalation Phases (75%/50%/25%), and 6 Dimensional Attacks.',
         coords: 'CORE-0.0',
         hpText: `${GAME_CONFIG.VOID_BOSS_HP.toLocaleString()} HP`
+      },
+      basketball: {
+        id: 'basketball',
+        titleHtml: 'GODLY BASKETBALL // COURT — <span>CELESTIAL HOOP</span>',
+        desc: 'Cosmic Hardwood Arena Boss: Face off against the Solar Titan & Orbiting Basketball Drones in a high-speed orbital hoops gauntlet (20,000 HP).',
+        coords: 'HOOP-7.7',
+        hpText: '20,000 HP'
       }
     };
 
@@ -1092,8 +1106,8 @@
     function getGalaxyGeometry() {
       const cx = GAME_CONFIG.ARENA_WIDTH * 0.54;
       const cy = GAME_CONFIG.ARENA_HEIGHT * 0.45;
-      const orbitRx = 265;
-      const orbitRy = 165;
+      const orbitRx = 340;
+      const orbitRy = 215;
       const starX = cx + Math.cos(state.galaxyAngle) * orbitRx;
       const starY = cy + Math.sin(state.galaxyAngle) * orbitRy;
       return { cx, cy, orbitRx, orbitRy, starX, starY };
@@ -1109,7 +1123,7 @@
     }
 
     function selectTarget(targetId) {
-      state.selectedTarget = targetId === 'void' ? 'void' : 'guardians';
+      state.selectedTarget = targetId === 'void' ? 'void' : (targetId === 'basketball' ? 'basketball' : 'guardians');
       const info = WORLD_TARGETS[state.selectedTarget];
 
       document.querySelectorAll('.world-tab').forEach((tab) => {
@@ -1124,6 +1138,9 @@
       if (state.selectedTarget === 'void') {
         startBtn.textContent = 'DEPLOY // THE TESSERACTS VOID';
         worldStatusNote.textContent = 'TARGET LOCKED: GALACTIC CORE SINGULARITY (50,000 HP) — CLICK DEPLOY TO LAUNCH';
+      } else if (state.selectedTarget === 'basketball') {
+        startBtn.textContent = 'DEPLOY // GODLY BASKETBALL';
+        worldStatusNote.textContent = 'TARGET LOCKED: CELESTIAL COURT HOOP (20,000 HP) — CLICK DEPLOY TO LAUNCH';
       } else {
         startBtn.textContent = 'DEPLOY // THE GUARDIANS (01)';
         worldStatusNote.textContent = 'TARGET LOCKED: THE GUARDIANS (5-BOSS GAUNTLET) — CLICK DEPLOY TO LAUNCH';
@@ -1145,14 +1162,23 @@
       }
       const pt = clientToArenaCoords(e.clientX, e.clientY);
       const g = getGalaxyGeometry();
+      const t = performance.now() * 0.001;
+      const bBallOrbitAngle = t * 0.45;
+      const bBallX = g.cx + Math.cos(bBallOrbitAngle) * 160;
+      const bBallY = g.cy + Math.sin(bBallOrbitAngle) * 100;
+
       const distVoid = Math.hypot(pt.x - g.cx, pt.y - g.cy);
       const distStar = Math.hypot(pt.x - g.starX, pt.y - g.starY);
+      const distBasketball = Math.hypot(pt.x - bBallX, pt.y - bBallY);
 
       if (distVoid <= 62) {
         state.galaxyHovered = 'void';
         canvas.style.cursor = 'pointer';
       } else if (distStar <= 48) {
         state.galaxyHovered = 'guardians';
+        canvas.style.cursor = 'pointer';
+      } else if (distBasketball <= 40) {
+        state.galaxyHovered = 'basketball';
         canvas.style.cursor = 'pointer';
       } else {
         state.galaxyHovered = null;
@@ -1164,13 +1190,21 @@
       if (state.screen !== 'START') return;
       const pt = clientToArenaCoords(e.clientX, e.clientY);
       const g = getGalaxyGeometry();
+      const t = performance.now() * 0.001;
+      const bBallOrbitAngle = t * 0.45;
+      const bBallX = g.cx + Math.cos(bBallOrbitAngle) * 160;
+      const bBallY = g.cy + Math.sin(bBallOrbitAngle) * 100;
+
       const distVoid = Math.hypot(pt.x - g.cx, pt.y - g.cy);
       const distStar = Math.hypot(pt.x - g.starX, pt.y - g.starY);
+      const distBasketball = Math.hypot(pt.x - bBallX, pt.y - bBallY);
 
       if (distVoid <= 62) {
         selectTarget('void');
       } else if (distStar <= 48) {
         selectTarget('guardians');
+      } else if (distBasketball <= 40) {
+        selectTarget('basketball');
       }
     });
 
@@ -1387,7 +1421,7 @@
       sfx.init();
       sfx.playSelect();
 
-      state.selectedTarget = targetId === 'void' ? 'void' : 'guardians';
+      state.selectedTarget = targetId === 'void' ? 'void' : (targetId === 'basketball' ? 'basketball' : 'guardians');
       state.screen = 'PLAYING';
       state.level = 1;
       state.score = 0;
@@ -1437,74 +1471,115 @@
 
       if (state.selectedTarget === 'void') {
         spawnVoidBoss();
+      } else if (state.selectedTarget === 'basketball') {
+        spawnBasketballBoss();
       } else {
         spawnBossForLevel(1);
       }
     }
 
-    function spawnVoidBoss() {
+    function spawnBasketballBoss() {
       const startX = GAME_CONFIG.ARENA_WIDTH * 0.5;
       const startY = GAME_CONFIG.ARENA_HEIGHT * 0.42;
+
+      state.boss = {
+        level: 7,
+        isBasketball: true,
+        code: 'HOOP-00',
+        name: 'CELESTIAL HOOP TITAN',
+        subtitle: 'GODLY BASKETBALL ARENA // COSMIC DUNK MASTER',
+        x: startX,
+        y: startY,
+        vx: 0,
+        vy: 0,
+        radius: 62,
+        sides: 5,
+        hp: 20000,
+        maxHp: 20000,
+        phase: 1,
+        angle: 0,
+        rotSpeed: 1.1,
+        hitFlash: 0,
+        attackTimer: 2.5,
+        attackStep: 0,
+        moveTimer: 0,
+        hoopPulse: 0,
+        legny: null,
+        hoopTimer: 0,
+        hoopActive: false
+      };
+
+      state.bannerTag = 'CELESTIAL TIPOFF // GODLY BASKETBALL';
+      state.bannerTitle = 'CELESTIAL HOOP TITAN';
+      state.bannerSubtitle = 'COSMIC HARDWOOD ACTIVE // PREPARE FOR ALL 4 ATTACKS';
+      state.bannerTimer = 2.6;
+
+      spawnShockwave(state.boss.x, state.boss.y, 240, '#ff0000', 0.6);
+      spawnShockwave(state.boss.x, state.boss.y, 160, '#ffffff', 0.45);
+      spawnParticles(state.boss.x, state.boss.y, 36, '#ff0000', 80, 320, 0.7);
+      sfx.playPhaseShift();
+    }
+
+    function spawnVoidBoss() {
+      const startX = GAME_CONFIG.ARENA_WIDTH * 0.5;
+      const startY = GAME_CONFIG.ARENA_HEIGHT * 0.44;
 
       state.boss = {
         level: 6,
         isVoid: true,
         code: 'CORE-00',
-        name: 'TESSERACT-VOID',
-        subtitle: '4D HYPERCUBE SINGULARITY // EVENT HORIZON',
+        name: 'THE TESSERACTS VOID',
+        subtitle: '4D HYPERCUBE SINGULARITY // GALACTIC CORE',
         x: startX,
         y: startY,
         vx: 0,
         vy: 0,
-        radius: 58,
+        radius: 54,
         sides: 4,
         hp: GAME_CONFIG.VOID_BOSS_HP,
         maxHp: GAME_CONFIG.VOID_BOSS_HP,
         phase: 1,
+        voidDmgMult: 1.0,
         angle: 0,
         rotSpeed: 0.89,
         hitFlash: 0,
-        attackTimer: 1.35,
-        attackStep: 0,
-        moveTimer: 0,
-
-        // Tesseract Void 6-Attack Sequencer & 4-Phase Escalation
+        voidAttackTimer: 2.5,
         voidAttackIndex: 0,
-        voidAttackTimer: 1.35,
-        voidAttackLabel: '4D SINGULARITY ACTIVE',
-        voidDmgMult: 1.0,
-        voidBgShards: Array.from({ length: 18 }, () => ({
-          x: Math.random() * GAME_CONFIG.ARENA_WIDTH,
-          y: 70 + Math.random() * (GAME_CONFIG.ARENA_HEIGHT - 80),
-          size: 8 + Math.random() * 18,
-          angle: Math.random() * Math.PI * 2,
-          spin: (Math.random() - 0.5) * 2.2,
-          orbitSpeed: 18 + Math.random() * 36
-        })),
-        omegaBeamState: 'NONE', // 'NONE' | 'TELEGRAPH' | 'FIRING'
-        omegaBeamTimer: 0,
-        omegaBeamAngle: Math.PI / 2,
+        voidAttackLabel: 'INITIATING SINGULARITY',
+        moveTimer: 0,
         arcChargeTimer: 0,
         arcChargeMax: 0,
         arcChargeAngle: 0,
-        implosionTimer: 0,
+        omegaBeamState: 'NONE',
+        omegaBeamTimer: 0,
+        omegaBeamAngle: 0,
         voidTeleportLeft: 0,
         voidTeleportTimer: 0,
-        warpAnimTimer: 0,
-        isUlt: false,
+        implosionTimer: 0,
         ultTriggered: false,
-        ultAnimTimer: 0
+        isUlt: false,
+        ultAnimTimer: 0,
+        isDying: false,
+        exploded: false,
+        deathTimer: 0,
+        voidBgShards: Array.from({ length: 24 }, () => ({
+          x: GAME_CONFIG.ARENA_WIDTH * 0.5 + (Math.random() - 0.5) * 800,
+          y: GAME_CONFIG.ARENA_HEIGHT * 0.45 + (Math.random() - 0.5) * 500,
+          size: 14 + Math.random() * 28,
+          angle: Math.random() * Math.PI * 2,
+          spin: (Math.random() - 0.5) * 1.5,
+          orbitSpeed: 30 + Math.random() * 70
+        }))
       };
 
-      state.bannerTag = 'SINGULARITY BREACH // GALACTIC CORE';
-      state.bannerTitle = 'TESSERACT-VOID';
-      state.bannerSubtitle = '4D HYPERCUBE SINGULARITY // GRAVITY WELL ACTIVE';
-      state.bannerTimer = 2.6;
+      state.bannerTag = 'GALACTIC CORE // SINGULARITY AWAKENED';
+      state.bannerTitle = 'THE TESSERACTS VOID';
+      state.bannerSubtitle = '4D HYPERCUBE ACTIVE // 50,000 HP // 6 DIMENSIONAL ATTACKS';
+      state.bannerTimer = 2.8;
 
       spawnShockwave(state.boss.x, state.boss.y, 260, '#ff0000', 0.65);
       spawnShockwave(state.boss.x, state.boss.y, 180, '#ffffff', 0.5);
-      spawnParticles(state.boss.x, state.boss.y, 38, '#ff0000', 90, 340, 0.75);
-      spawnParticles(state.boss.x, state.boss.y, 32, '#ffffff', 80, 310, 0.7);
+      spawnParticles(state.boss.x, state.boss.y, 42, '#ff0000', 90, 360, 0.75);
       sfx.playPhaseShift();
     }
 
@@ -2454,7 +2529,218 @@
       const p = state.player;
       if (!b) return;
 
-      // Run Cinematic Center-Pull, Cracking & Detonation Sequence for TESSERACT-VOID
+      if (b.isBasketball) {
+        b.angle += b.rotSpeed * dt;
+        if (b.hitFlash > 0) b.hitFlash -= dt;
+        b.hoopPulse += dt * 5;
+
+        // Phase escalation at 50% HP
+        if (b.phase === 1 && b.hp <= b.maxHp * 0.5) {
+          b.phase = 2;
+          b.rotSpeed *= 1.8;
+          sfx.playPhaseShift();
+          state.shakeTime = 0.45;
+          state.shakeMagnitude = 12;
+          spawnShockwave(b.x, b.y, 220, '#ff0000', 0.55);
+          spawnParticles(b.x, b.y, 30, '#ffffff', 70, 310, 0.65);
+          state.bannerTag = 'GODLY BASKETBALL // OVERTIME OVERDRIVE';
+          state.bannerTitle = 'CELESTIAL HOOP TITAN — PHASE 2';
+          state.bannerSubtitle = 'COURT ON FIRE // ALL 4 ATTACKS ENHANCED';
+          state.bannerTimer = 2.4;
+        }
+
+        b.moveTimer += dt;
+        const targetX = GAME_CONFIG.ARENA_WIDTH * 0.5 + Math.sin(b.moveTimer * 0.8) * 280;
+        const targetY = GAME_CONFIG.ARENA_HEIGHT * 0.42 + Math.cos(b.moveTimer * 1.2) * 110;
+        b.x += (targetX - b.x) * Math.min(1, dt * 2.5);
+        b.y += (targetY - b.y) * Math.min(1, dt * 2.5);
+        clampBossToArena(b);
+
+        // Update 5-second hoop scramble timer (ATK 04)
+        if (b.hoopActive) {
+          b.hoopTimer -= dt;
+          // Check if player collected a stationary basketball pickup
+          if (state.healthPack && Math.hypot(p.x - state.healthPack.x, p.y - state.healthPack.y) <= p.radius + state.healthPack.radius) {
+            sfx.playHeal();
+            spawnFloatingText(state.healthPack.x, state.healthPack.y - 18, 'HOOP SECURED // 0 DAMAGE', '#ffffff');
+            state.healthPack = null;
+            b.hoopActive = false;
+          } else if (b.hoopTimer <= 0) {
+            // Player failed to collect basketball within 5 seconds -> take 25% damage
+            const dmg25 = Math.round(p.maxHp * 0.25);
+            damagePlayer(dmg25);
+            spawnExplosion(p.x, p.y, true);
+            spawnFloatingText(p.x, p.y - 25, `MISSED HOOP // -${dmg25} HP (25%)`, '#ff0000');
+            b.hoopActive = false;
+            if (state.healthPack) state.healthPack = null;
+          }
+        }
+
+        // Update Legny AI if active
+        if (b.legny) {
+          const lgn = b.legny;
+          lgn.timer -= dt;
+
+          if (lgn.state === 'DODGING') {
+            lgn.angle += lgn.spinDir * 3.2 * dt;
+            const orbitX = p.x + Math.cos(lgn.angle) * lgn.orbitDist;
+            const orbitY = p.y + Math.sin(lgn.angle) * lgn.orbitDist;
+            lgn.x += (orbitX - lgn.x) * dt * 5;
+            lgn.y += (orbitY - lgn.y) * dt * 5;
+
+            if (lgn.timer <= 0) {
+              lgn.state = 'TELEGRAPH';
+              lgn.timer = 0.6;
+              lgn.dunkTargetX = p.x;
+              lgn.dunkTargetY = p.y;
+              sfx.playLaser();
+            }
+          } else if (lgn.state === 'TELEGRAPH') {
+            lgn.timer -= dt;
+            if (lgn.timer <= 0) {
+              lgn.state = 'DUNK';
+              lgn.timer = 0.5;
+              const ang = Math.atan2(lgn.dunkTargetY - lgn.y, lgn.dunkTargetX - lgn.x);
+              lgn.vx = Math.cos(ang) * 950;
+              lgn.vy = Math.sin(ang) * 950;
+              sfx.playDash();
+            }
+          } else if (lgn.state === 'DUNK') {
+            lgn.x += lgn.vx * dt;
+            lgn.y += lgn.vy * dt;
+            lgn.timer -= dt;
+
+            if (Math.hypot(p.x - lgn.x, p.y - lgn.y) <= p.radius + lgn.radius + 15) {
+              damagePlayer(30);
+              spawnExplosion(lgn.x, lgn.y, false);
+              b.legny = null;
+            } else if (lgn.timer <= 0) {
+              // Legny explodes in a medium area upon timeout/despawn
+              spawnExplosion(lgn.x, lgn.y, false);
+              spawnShockwave(lgn.x, lgn.y, 110, '#ff0000', 0.35);
+              if (Math.hypot(p.x - lgn.x, p.y - lgn.y) <= 110 + p.radius) {
+                damagePlayer(20);
+              }
+              b.legny = null;
+            }
+          }
+        }
+
+        // Basketball Attack Timer: cycles through ATK 01, ATK 02, ATK 03, ATK 04 with 2-5 second random wait
+        b.attackTimer -= dt;
+        if (b.attackTimer <= 0) {
+          b.attackTimer = 2.0 + Math.random() * 3.0; // 2 to 5 seconds wait
+          b.attackStep = (b.attackStep + 1) % 4;
+
+          if (b.attackStep === 0) {
+            // ATK 01: Bouncing mini basketballs
+            sfx.playBossFire();
+            const miniCount = b.phase === 2 ? 6 : 4;
+            for (let m = 0; m < miniCount; m++) {
+              const ang = (m * Math.PI * 2) / miniCount + Math.random() * 0.2;
+              const spd = 260 + Math.random() * 80;
+              state.enemyBullets.push({
+                x: b.x,
+                y: b.y,
+                vx: Math.cos(ang) * spd,
+                vy: Math.sin(ang) * spd,
+                radius: 9,
+                color: '#ff0000',
+                bounces: 3,
+                isBasketball: true,
+                damage: 15,
+                life: 10.0
+              });
+            }
+          } else if (b.attackStep === 1) {
+            // ATK 02: Send out "Legny" to confuse and dunk
+            if (!b.legny) {
+              sfx.playPhaseShift();
+              b.legny = {
+                x: b.x,
+                y: b.y,
+                radius: 14,
+                state: 'DODGING',
+                timer: 2.2,
+                orbitDist: 160,
+                angle: Math.random() * Math.PI * 2,
+                spinDir: Math.random() < 0.5 ? 1 : -1,
+                vx: 0,
+                vy: 0,
+                dunkTargetX: 0,
+                dunkTargetY: 0
+              };
+              spawnShockwave(b.x, b.y, 90, '#ffffff', 0.4);
+            }
+          } else if (b.attackStep === 2) {
+            // ATK 03: Fires 6 lasers in a random direction
+            sfx.playLaser();
+            spawnShockwave(b.x, b.y, 140, '#ff0000', 0.4);
+            const baseAng = Math.random() * Math.PI * 2;
+            for (let l = 0; l < 6; l++) {
+              state.lasers.push({
+                angle: baseAng + (l * Math.PI) / 3,
+                spinRate: (l % 2 === 0 ? 1 : -1) * 0.45,
+                telegraph: 0.85,
+                duration: 1.5,
+                width: 14,
+                damage: 18,
+                color: l % 2 === 0 ? '#ff0000' : '#ffffff'
+              });
+            }
+          } else {
+            // ATK 04: 5 second timer, get stationary basketball or take 25% damage
+            b.hoopActive = true;
+            b.hoopTimer = 5.0;
+            const wp = pickFullArenaWaypoint(110);
+            state.healthPack = {
+              x: wp.x,
+              y: wp.y,
+              radius: GAME_CONFIG.HEALTH_PACK_RADIUS,
+              pulse: 0
+            };
+            sfx.playPhaseShift();
+            spawnShockwave(wp.x, wp.y, 70, '#ffffff', 0.4);
+          }
+        }
+
+        // Update bouncing mini basketballs
+        for (let i = state.enemyBullets.length - 1; i >= 0; i--) {
+          const eb = state.enemyBullets[i];
+          if (!eb.isBasketball) continue;
+
+          eb.x += eb.vx * dt;
+          eb.y += eb.vy * dt;
+          eb.life -= dt;
+
+          const minX = 20;
+          const maxX = GAME_CONFIG.ARENA_WIDTH - 20;
+          const minY = 76;
+          const maxY = GAME_CONFIG.ARENA_HEIGHT - 20;
+
+          if (eb.x <= minX) { eb.x = minX; eb.vx *= -1; eb.bounces--; sfx.playTone(300, 150, 0.05, 'triangle', 0.5); }
+          else if (eb.x >= maxX) { eb.x = maxX; eb.vx *= -1; eb.bounces--; sfx.playTone(300, 150, 0.05, 'triangle', 0.5); }
+          if (eb.y <= minY) { eb.y = minY; eb.vy *= -1; eb.bounces--; sfx.playTone(300, 150, 0.05, 'triangle', 0.5); }
+          else if (eb.y >= maxY) { eb.y = maxY; eb.vy *= -1; eb.bounces--; sfx.playTone(300, 150, 0.05, 'triangle', 0.5); }
+
+          if (eb.bounces < 0 || eb.life <= 0) {
+            state.enemyBullets.splice(i, 1);
+            continue;
+          }
+
+          if (state.screen === 'PLAYING' && Math.hypot(eb.x - p.x, eb.y - p.y) < eb.radius + p.radius - 2) {
+            state.enemyBullets.splice(i, 1);
+            damagePlayer(eb.damage);
+            if (state.screen !== 'PLAYING') return;
+          }
+        }
+
+        if (Math.hypot(p.x - b.x, p.y - b.y) < p.radius + b.radius - 4) {
+          damagePlayer(22);
+        }
+        return;
+      }
+
       if (b.isVoid && b.isDying) {
         updateTesseractDeath(b, dt);
         return;
@@ -4624,8 +4910,100 @@
       if (!b || b.exploded) return;
 
       // ------------------------------------------------------------------------
-      // SPECIAL RENDERER: STANDALONE SINGULARITY BOSS — THE TESSERACTS VOID
+      // SPECIAL RENDERER: "GODLY BASKETBALL" BOSS — CELESTIAL HOOP TITAN & LEGNY
       // ------------------------------------------------------------------------
+      if (b.isBasketball) {
+        ctx.save();
+        ctx.translate(b.x, b.y);
+
+        // Court hardwood floor glow
+        const hoopGrad = ctx.createRadialGradient(0, 0, b.radius * 0.3, 0, 0, b.radius + 50);
+        hoopGrad.addColorStop(0, 'rgba(255, 0, 0, 0.45)');
+        hoopGrad.addColorStop(0.6, 'rgba(255, 255, 255, 0.15)');
+        hoopGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = hoopGrad;
+        ctx.beginPath();
+        ctx.arc(0, 0, b.radius + 50, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Rotating Cosmic Basketball Orange Body with Black Seams
+        ctx.save();
+        ctx.rotate(b.angle);
+        ctx.fillStyle = '#ff0000';
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(0, 0, b.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        // Basketball Seam Curves
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.arc(-b.radius * 0.4, 0, b.radius * 0.85, -Math.PI / 3, Math.PI / 3);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(b.radius * 0.4, 0, b.radius * 0.85, Math.PI - Math.PI / 3, Math.PI + Math.PI / 3);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0, -b.radius);
+        ctx.lineTo(0, b.radius);
+        ctx.stroke();
+        ctx.restore();
+
+        // Orbiting Celestial Hoop Ring
+        ctx.save();
+        ctx.rotate(-b.angle * 1.5);
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 3.5;
+        ctx.beginPath();
+        ctx.ellipse(0, 0, b.radius + 24, (b.radius + 24) * 0.38, 0, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+
+        ctx.font = '800 11px "Orbitron", monospace';
+        ctx.fillStyle = '#ffffff';
+        ctx.textAlign = 'center';
+        ctx.fillText(`GODLY BASKETBALL // PHASE 0${b.phase}`, 0, -b.radius - 36);
+
+        ctx.restore();
+
+        // Draw Legny if active
+        if (b.legny) {
+          const lgn = b.legny;
+          ctx.save();
+          ctx.translate(lgn.x, lgn.y);
+
+          if (lgn.state === 'TELEGRAPH') {
+            ctx.strokeStyle = 'rgba(255, 0, 0, 0.8)';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(state.player.x - lgn.x, state.player.y - lgn.y);
+            ctx.stroke();
+            ctx.setLineDash([]);
+          }
+
+          ctx.fillStyle = '#000000';
+          ctx.strokeStyle = lgn.state === 'TELEGRAPH' ? '#ffffff' : '#ff0000';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(0, 0, lgn.radius, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.font = '800 9px "JetBrains Mono", monospace';
+          ctx.fillStyle = '#ffffff';
+          ctx.textAlign = 'center';
+          ctx.fillText('LEGNY', 0, -lgn.radius - 6);
+
+          ctx.restore();
+        }
+        return;
+      }
+
       if (b.isVoid) {
         const primaryStroke = b.hitFlash > 0 ? '#ffffff' : '#ff0000';
         const secondaryStroke = b.hitFlash > 0 ? '#ff0000' : '#ffffff';
@@ -5153,8 +5531,31 @@
         ctx.restore();
       }
 
-      // 2. Enemy Bullets
+      // 2. Enemy Bullets (including mini bouncing basketballs)
       for (const eb of state.enemyBullets) {
+        if (eb.isBasketball) {
+          ctx.save();
+          ctx.translate(eb.x, eb.y);
+          ctx.fillStyle = '#ff0000';
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.arc(0, 0, eb.radius, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.arc(-3, 0, eb.radius * 0.8, -Math.PI / 3, Math.PI / 3);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.arc(3, 0, eb.radius * 0.8, Math.PI - Math.PI / 3, Math.PI + Math.PI / 3);
+          ctx.stroke();
+          ctx.restore();
+          continue;
+        }
+
         const isRgb = typeof eb.rgbHue === 'number';
         const bulletCol = isRgb ? `hsl(${eb.rgbHue}, 100%, 55%)` : (eb.color || '#ff0000');
         ctx.save();
@@ -5947,6 +6348,50 @@
       ctx.fillText('[ORBITING STAR // 5 BOSSES]', 0, -34);
 
       ctx.restore();
+
+      // 6. Orbiting Basketball (Godly Basketball System - Slower & Farther)
+      const bBallOrbitAngle = t * 0.45;
+      const bBallOrbitRx = 160;
+      const bBallOrbitRy = 100;
+      const bBallX = g.cx + Math.cos(bBallOrbitAngle) * bBallOrbitRx;
+      const bBallY = g.cy + Math.sin(bBallOrbitAngle) * bBallOrbitRy;
+      const bBallSelected = state.selectedTarget === 'basketball';
+      const bBallHovered = state.galaxyHovered === 'basketball';
+
+      ctx.save();
+      ctx.translate(bBallX, bBallY);
+      ctx.rotate(t * 1.2);
+
+      ctx.fillStyle = '#ff0000';
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(0, 0, 12, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.arc(-4, 0, 10, -Math.PI / 3, Math.PI / 3);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(4, 0, 10, Math.PI - Math.PI / 3, Math.PI + Math.PI / 3);
+      ctx.stroke();
+
+      ctx.restore();
+
+      if (bBallSelected || bBallHovered) {
+        drawTargetBrackets(ctx, bBallX, bBallY, 26, bBallSelected ? '#ff0000' : '#ffffff');
+      }
+
+      ctx.textAlign = 'center';
+      ctx.font = '900 11px "Orbitron", monospace';
+      ctx.fillStyle = bBallSelected ? '#ff0000' : '#ffffff';
+      ctx.fillText('GODLY BASKETBALL', bBallX, bBallY + 24);
+      ctx.font = '700 9px "JetBrains Mono", monospace';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.78)';
+      ctx.fillText('[CELESTIAL COURT // 1 BOSS]', bBallX, bBallY + 36);
     }
 
     function drawTargetBrackets(context, cx, cy, r, color) {
@@ -5973,7 +6418,7 @@
       lastTimestamp = now;
 
       if (state.screen === 'START') {
-        state.galaxyAngle = (state.galaxyAngle + dt * 0.24) % (Math.PI * 2);
+        state.galaxyAngle = (state.galaxyAngle + dt * 0.08) % (Math.PI * 2);
       }
 
       if (state.screen === 'PLAYING') {
