@@ -89,8 +89,8 @@
 
     .galaxy-top-left {
       position: absolute;
-      top: 10px;
-      left: 12px;
+      top: 56px;
+      left: 16px;
       pointer-events: auto;
       max-width: 340px;
       background: rgba(0, 0, 0, 0.82);
@@ -351,7 +351,7 @@
 
     @media (max-width: 680px) {
       .galaxy-top-left {
-        top: 42px;
+        top: 52px;
         left: 8px;
         right: 8px;
         max-width: none;
@@ -559,6 +559,11 @@
   <div id="app-shell">
     <!-- Main HTML5 Canvas -->
     <canvas id="gameCanvas"></canvas>
+
+    <!-- Quick Top-Left Fullscreen Controls -->
+    <div style="position: absolute; top: 14px; left: 16px; z-index: 25;">
+      <button id="fullscreen-toggle-btn" class="top-hud-btn" type="button" aria-label="Toggle Fullscreen">FULLSCREEN</button>
+    </div>
 
     <!-- Quick Top-Right HUD Controls -->
     <div class="top-hud-actions">
@@ -1275,6 +1280,28 @@
       document.getElementById('audio-toggle-btn').textContent = isOn ? 'SFX: ON' : 'SFX: OFF';
       document.getElementById('modal-audio-btn').textContent = isOn ? 'AUDIO: ENABLED' : 'AUDIO: MUTED';
     }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        if (document.documentElement.requestFullscreen) {
+          document.documentElement.requestFullscreen().catch(() => {
+            // Gracefully handle sandboxed iframe permission restrictions without console error
+          });
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        }
+      }
+    }
+
+    document.getElementById('fullscreen-toggle-btn').addEventListener('click', toggleFullscreen);
+    document.addEventListener('fullscreenchange', () => {
+      const btn = document.getElementById('fullscreen-toggle-btn');
+      if (btn) {
+        btn.textContent = document.fullscreenElement ? 'EXIT FS' : 'FULLSCREEN';
+      }
+    });
 
     document.getElementById('start-btn').addEventListener('click', () => startMission(state.selectedTarget));
     document.getElementById('retry-btn').addEventListener('click', () => startMission(state.selectedTarget));
